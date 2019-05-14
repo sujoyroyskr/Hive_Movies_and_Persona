@@ -1,0 +1,10 @@
+drop table json;
+drop table artist;
+create table json(col2 string);
+load data local inpath 'persona.json' into table json;
+select * from json;
+create table artist(id string,last_name string,first_name string,year_of_birth string);
+insert overwrite table artist select get_json_object(col2,'$.id'),get_json_object(col2,'$.last_name'),get_json_object(col2,'$.first_name'),get_json_object(col2,'$.year_of_birth') from json;
+set hive.cli.print.header=true;
+select * from artist;
+desc artist;
